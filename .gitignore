@@ -1,0 +1,23 @@
+node_modules/
+dist/
+coverage/
+
+# env files
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# firebase service account
+firebase-service-account.json

@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(timeout 8 npx ts-node-dev --transpile-only src/server.ts)",
+      "Bash(npm run *)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill //F //PID 21772)",
+      "Bash(npx ts-node-dev *)",
+      "Bash(curl -s http://localhost:4000/api/healthz)",
+      "Bash(cd \"/c/Users/Administrator/Desktop/utlraquad erp backend\" && grep -n \"email\" db/migrations/*.js src/repositories/auth.repository.ts src/interfaces/member.interface.ts src/schemas/auth.schema.ts src/services/auth.service.ts)",
+      "Read(//c/c/Users/Administrator/Desktop/utlraquad erp backend/db/**)",
+      "Bash(PGPASSWORD=dev psql -U postgres -h localhost -d ultraquad -c \"SELECT id, member_code, name, phone, email FROM members;\")",
+      "Bash(node -e ' *)",
+      "Bash(taskkill //F //PID 1904)",
+      "Bash(taskkill //F //PID 28952)",
+      "Bash(cd \"/c/Users/Administrator/Desktop/utlraquad erp backend\" && ls src/utils && ls db/migrations)",
+      "Read(//c/c/Users/Administrator/Desktop/utlraquad erp backend/src/**)",
+      "Bash(cd \"/c/Users/Administrator/Desktop/utlraquad erp backend\" && mkdir -p src/templates)",
+      "Bash(taskkill //F //PID 26032)",
+      "Bash(curl -s -X POST http://localhost:4000/api/auth/forgot-password -H \"Content-Type: application/json\" -d \"{\\\\\"email\\\\\":\\\\\"jethro2@example.com\\\\\"}\")",
+      "Bash(curl -s -X POST http://localhost:4000/api/auth/forgot-password -H \"Content-Type: application/json\" -d \"{\\\\\"email\\\\\":\\\\\"jethrosumbeiywet@gmail.com\\\\\"}\")",
+      "Bash(curl -s -X POST http://localhost:4000/api/auth/verify-otp -H \"Content-Type: application/json\" -d \"{\\\\\"email\\\\\":\\\\\"jethrosumbeiywet@gmail.com\\\\\",\\\\\"otp\\\\\":\\\\\"024200\\\\\"}\")",
+      "Bash(curl -s -X POST http://localhost:4000/api/auth/reset-password -H \"Content-Type: application/json\" -d \"{\\\\\"email\\\\\":\\\\\"jethrosumbeiywet@gmail.com\\\\\",\\\\\"otp\\\\\":\\\\\"024200\\\\\",\\\\\"newPassword\\\\\":\\\\\"NewPassword123!\\\\\"}\")",
+      "Bash(curl -s -X POST http://localhost:4000/api/auth/login -H \"Content-Type: application/json\" -d \"{\\\\\"email\\\\\":\\\\\"jethrosumbeiywet@gmail.com\\\\\",\\\\\"password\\\\\":\\\\\"NewPassword123!\\\\\"}\")",
+      "Bash(taskkill //F //PID 30092)",
+      "Bash(curl -s http://localhost:4000/healthz)"
+    ],
+    "additionalDirectories": [
+      "c:\\c\\Users\\Administrator\\Desktop\\utlraquad erp backend\\src"
+    ]
+  }
+}
