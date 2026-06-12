@@ -125,6 +125,10 @@ export async function forgotPassword(email: string): Promise<void> {
   await sendOtpEmail(member.email as string, member.name, otp, OTP_EXPIRY_MINUTES);
 }
 
+export async function sendOtp(email: string): Promise<void> {
+  return forgotPassword(email);
+}
+
 export async function verifyOtp(email: string, otp: string): Promise<void> {
   const member = await authRepository.findMemberByEmail(email);
   if (!member) {

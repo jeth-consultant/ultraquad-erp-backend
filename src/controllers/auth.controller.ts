@@ -26,6 +26,11 @@ export async function forgotPassword(req: Request, res: Response): Promise<void>
   res.status(200).json({ message: 'If the account exists, an OTP has been sent to the email' });
 }
 
+export async function sendOtp(req: Request, res: Response): Promise<void> {
+  await authService.sendOtp(req.body.email);
+  res.status(200).json({ message: 'If the account exists, an OTP has been sent to the email' });
+}
+
 export async function verifyOtp(req: Request, res: Response): Promise<void> {
   await authService.verifyOtp(req.body.email, req.body.otp);
   res.status(200).json({ message: 'OTP verified' });

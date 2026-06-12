@@ -9,6 +9,7 @@ import {
   refreshSchema,
   registerSchema,
   resetPasswordSchema,
+  sendOtpSchema,
   verifyOtpSchema,
 } from '../schemas/auth.schema';
 
@@ -28,6 +29,12 @@ authRouter.post(
   authLimiter,
   validate(forgotPasswordSchema),
   asyncHandler(authController.forgotPassword),
+);
+authRouter.post(
+  '/send-otp',
+  authLimiter,
+  validate(sendOtpSchema),
+  asyncHandler(authController.sendOtp),
 );
 authRouter.post(
   '/verify-otp',

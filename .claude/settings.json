@@ -25,7 +25,12 @@
       "Bash(curl -s -X POST http://localhost:4000/api/auth/reset-password -H \"Content-Type: application/json\" -d \"{\\\\\"email\\\\\":\\\\\"jethrosumbeiywet@gmail.com\\\\\",\\\\\"otp\\\\\":\\\\\"024200\\\\\",\\\\\"newPassword\\\\\":\\\\\"NewPassword123!\\\\\"}\")",
       "Bash(curl -s -X POST http://localhost:4000/api/auth/login -H \"Content-Type: application/json\" -d \"{\\\\\"email\\\\\":\\\\\"jethrosumbeiywet@gmail.com\\\\\",\\\\\"password\\\\\":\\\\\"NewPassword123!\\\\\"}\")",
       "Bash(taskkill //F //PID 30092)",
-      "Bash(curl -s http://localhost:4000/healthz)"
+      "Bash(curl -s http://localhost:4000/healthz)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:4000/api/auth/login -X POST -H \"Content-Type: application/json\" -d '{\"email\":\"test@test.com\",\"password\":\"x\"}')",
+      "Bash(curl -s -X POST http://localhost:4000/api/auth/forgot-password -H \"Content-Type: application/json\" -d '{\"email\":\"jethrosumbeiywet@gmail.com\"}')",
+      "Bash(ls \"/c/Users/ADMINI~1/AppData/Local/Temp/claude/c--Users-Administrator-Desktop-utlraquad-erp-backend/f4792f2e-e9c8-49df-9344-da25fb73c0b9/tasks/\")",
+      "Read(//c/Users/ADMINI~1/AppData/Local/Temp/claude/c--Users-Administrator-Desktop-utlraquad-erp-backend/f4792f2e-e9c8-49df-9344-da25fb73c0b9/tasks//**)",
+      "Read(//c/Users/Administrator/Desktop/**)"
     ],
     "additionalDirectories": [
       "c:\\c\\Users\\Administrator\\Desktop\\utlraquad erp backend\\src"
