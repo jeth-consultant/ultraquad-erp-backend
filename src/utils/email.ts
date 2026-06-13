@@ -2,6 +2,7 @@ import path from 'path';
 import ejs from 'ejs';
 import nodemailer, { Transporter } from 'nodemailer';
 import { env } from '../config/env';
+import { logger } from './logger';
 
 let transporterPromise: Promise<Transporter> | undefined;
 
@@ -48,7 +49,6 @@ export async function sendOtpEmail(to: string, name: string, otp: string, expire
 
   const previewUrl = nodemailer.getTestMessageUrl(info);
   if (previewUrl) {
-    // eslint-disable-next-line no-console
-    console.log(`[email] OTP email preview: ${previewUrl}`);
+    logger.info({ previewUrl }, 'OTP email preview (Ethereal test inbox)');
   }
 }

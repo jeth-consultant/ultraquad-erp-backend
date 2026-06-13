@@ -3,7 +3,7 @@ export interface Member {
   member_code: string;
   name: string;
   phone: string;
-  email: string | null;
+  email: string;
   password_hash: string;
   github_username: string | null;
   role: 'member' | 'admin';

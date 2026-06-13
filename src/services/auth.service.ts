@@ -122,7 +122,7 @@ export async function forgotPassword(email: string): Promise<void> {
     expiresAtEpochSeconds: expiresAt,
   });
 
-  await sendOtpEmail(member.email as string, member.name, otp, OTP_EXPIRY_MINUTES);
+  await sendOtpEmail(member.email, member.name, otp, OTP_EXPIRY_MINUTES);
 }
 
 export async function sendOtp(email: string): Promise<void> {
