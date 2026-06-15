@@ -5,6 +5,7 @@ import pinoHttp from 'pino-http';
 import { env } from './config/env';
 import { errorHandler } from './middleware/errorHandler';
 import { generalLimiter } from './middleware/rateLimit';
+import { adminRouter } from './routes/admin.routes';
 import { authRouter } from './routes/auth.routes';
 import { mpesaRouter } from './routes/mpesa.routes';
 import { paymentsRouter } from './routes/payments.routes';
@@ -30,6 +31,7 @@ export function createApp(): Express {
   app.use('/api/me', profileRouter);
   app.use('/api/payments', paymentsRouter);
   app.use('/api/mpesa', mpesaRouter);
+  app.use('/api/admin', adminRouter);
 
   app.use(errorHandler);
 
