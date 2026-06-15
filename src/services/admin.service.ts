@@ -4,9 +4,12 @@ import * as adminRepository from '../repositories/admin.repository';
 import * as contributionsRepository from '../repositories/contributions.repository';
 import * as finesRepository from '../repositories/fines.repository';
 import * as notificationsRepository from '../repositories/notifications.repository';
+import * as pushDaysRepository from '../repositories/pushDays.repository';
+import { runDailyPushSync } from '../jobs/pushSync.job';
 import { AdminUpdateMemberInput } from '../repositories/admin.repository';
 import { ContributionFilters } from '../repositories/contributions.repository';
 import { FineFilters } from '../repositories/fines.repository';
+import { PushDayFilters } from '../repositories/pushDays.repository';
 import { Fine } from '../interfaces/payment.interface';
 import { toCsv } from '../utils/csv';
 
@@ -111,6 +114,14 @@ export async function createContribution(input: {
 export async function broadcastNotification(title: string, body: string) {
   const count = await notificationsRepository.insertForAllMembers(title, body, 'admin_broadcast');
   return { ok: true, recipients: count };
+}
+
+export async function listPushDays(filters: PushDayFilters) {
+  return pushDaysRepository.findAll(filters);
+}
+
+export async function runPushSync(date?: string) {
+  return runDailyPushSync(date);
 }
 
 export async function exportMembersCsv(): Promise<string> {

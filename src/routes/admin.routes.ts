@@ -12,7 +12,9 @@ import {
   listContributionsQuerySchema,
   listFinesQuerySchema,
   listMembersQuerySchema,
+  listPushDaysQuerySchema,
   memberIdParamSchema,
+  runPushSyncSchema,
   updateMemberSchema,
 } from '../schemas/admin.schema';
 import { asyncHandler } from '../utils/asyncHandler';
@@ -58,6 +60,13 @@ adminRouter.post(
   validate(broadcastNotificationSchema),
   asyncHandler(adminController.broadcastNotification),
 );
+
+adminRouter.get(
+  '/push-days',
+  validate(listPushDaysQuerySchema, 'query'),
+  asyncHandler(adminController.listPushDays),
+);
+adminRouter.post('/push-sync/run', validate(runPushSyncSchema), asyncHandler(adminController.runPushSync));
 
 adminRouter.get('/export/members.csv', asyncHandler(adminController.exportMembers));
 adminRouter.get(

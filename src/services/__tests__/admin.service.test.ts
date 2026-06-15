@@ -2,11 +2,13 @@ import { ApiError } from '../../middleware/errorHandler';
 import * as adminRepository from '../../repositories/admin.repository';
 import * as finesRepository from '../../repositories/fines.repository';
 import * as notificationsRepository from '../../repositories/notifications.repository';
+import * as pushSyncJob from '../../jobs/pushSync.job';
 import * as adminService from '../admin.service';
 
 jest.mock('../../repositories/admin.repository');
 jest.mock('../../repositories/fines.repository');
 jest.mock('../../repositories/notifications.repository');
+jest.mock('../../jobs/pushSync.job');
 
 describe('admin.service', () => {
   afterEach(() => {
@@ -56,6 +58,17 @@ describe('admin.service', () => {
       expect(notificationsRepository.insert).toHaveBeenCalledWith(
         expect.objectContaining({ memberId: 1, type: 'fine_created' }),
       );
+    });
+  });
+
+  describe('runPushSync', () => {
+    it('delegates to the daily push sync job', async () => {
+      jest.mocked(pushSyncJob.runDailyPushSync).mockResolvedValue({ checked: 5, fined: 1 });
+
+      const result = await adminService.runPushSync('2026-06-15');
+
+      expect(result).toEqual({ checked: 5, fined: 1 });
+      expect(pushSyncJob.runDailyPushSync).toHaveBeenCalledWith('2026-06-15');
     });
   });
 

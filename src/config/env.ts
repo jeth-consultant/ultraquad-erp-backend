@@ -71,6 +71,8 @@ export const env = {
 
   githubPat: process.env.GITHUB_PAT ?? '',
 
+  enableCronJobs: process.env.ENABLE_CRON_JOBS !== 'false',
+
   sentryDsn: process.env.SENTRY_DSN ?? '',
 
   logLevel: process.env.LOG_LEVEL ?? 'info',
