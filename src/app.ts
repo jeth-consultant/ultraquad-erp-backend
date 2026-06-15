@@ -6,11 +6,15 @@ import { env } from './config/env';
 import { errorHandler } from './middleware/errorHandler';
 import { generalLimiter } from './middleware/rateLimit';
 import { authRouter } from './routes/auth.routes';
+import { mpesaRouter } from './routes/mpesa.routes';
+import { paymentsRouter } from './routes/payments.routes';
 import { profileRouter } from './routes/profile.routes';
 import { logger } from './utils/logger';
 
 export function createApp(): Express {
   const app = express();
+
+  app.set('trust proxy', env.trustProxy ? 1 : false);
 
   app.use(helmet());
   app.use(cors({ origin: env.corsOrigins.length > 0 ? env.corsOrigins : false }));
@@ -24,6 +28,8 @@ export function createApp(): Express {
 
   app.use('/api/auth', authRouter);
   app.use('/api/me', profileRouter);
+  app.use('/api/payments', paymentsRouter);
+  app.use('/api/mpesa', mpesaRouter);
 
   app.use(errorHandler);
 

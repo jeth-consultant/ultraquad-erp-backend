@@ -37,7 +37,26 @@ export const env = {
     passkey: process.env.MPESA_PASSKEY ?? '',
     hmacSecret: process.env.MPESA_HMAC_SECRET ?? '',
     callbackBaseUrl: process.env.MPESA_CALLBACK_BASE_URL ?? '',
+    baseUrl:
+      process.env.MPESA_ENV === 'production'
+        ? 'https://api.safaricom.co.ke'
+        : 'https://sandbox.safaricom.co.ke',
+    transactionType: 'CustomerPayBillOnline',
+    get callbackUrl(): string {
+      return `${process.env.MPESA_CALLBACK_BASE_URL ?? ''}/api/mpesa/stkpush/callback`;
+    },
   },
+
+  // Set to true when running behind a reverse proxy/load balancer so req.ip
+  // reflects the real client (needed for the M-Pesa IP allowlist).
+  trustProxy: process.env.TRUST_PROXY === 'true',
+
+  // Optional comma-separated list of additional IPs allowed to call /api/mpesa/*,
+  // useful for testing via ngrok in sandbox.
+  mpesaAllowedIps: (process.env.MPESA_ALLOWED_IPS ?? '')
+    .split(',')
+    .map((ip) => ip.trim())
+    .filter((ip) => ip.length > 0),
 
   smtp: {
     host: process.env.SMTP_HOST ?? '',
