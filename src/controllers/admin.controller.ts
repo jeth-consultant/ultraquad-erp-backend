@@ -73,6 +73,18 @@ export async function broadcastNotification(req: Request, res: Response): Promis
   res.status(201).json(result);
 }
 
+export async function listPushDays(req: Request, res: Response): Promise<void> {
+  const { member_id, date } = req.query as unknown as { member_id?: number; date?: string };
+  const pushDays = await adminService.listPushDays({ memberId: member_id, date });
+  res.status(200).json(pushDays);
+}
+
+export async function runPushSync(req: Request, res: Response): Promise<void> {
+  const { date } = req.body as { date?: string };
+  const result = await adminService.runPushSync(date);
+  res.status(200).json(result);
+}
+
 export async function exportMembers(_req: Request, res: Response): Promise<void> {
   const csv = await adminService.exportMembersCsv();
   res.status(200).set('Content-Type', 'text/csv').set('Content-Disposition', 'attachment; filename=members.csv').send(csv);
