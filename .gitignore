@@ -21,3 +21,6 @@ Thumbs.db
 
 # firebase service account
 firebase-service-account.json
+
+# claude code local settings
+.claude/

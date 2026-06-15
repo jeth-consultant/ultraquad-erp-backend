@@ -17,6 +17,13 @@ export const signupLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+export const paymentLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: isDev ? 100 : 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 export const mpesaLimiter = rateLimit({
   windowMs: 60 * 1000,
   limit: 60,
