@@ -1,11 +1,40 @@
 import { Request, Response } from 'express';
+import { Member } from '../interfaces/member.interface';
 import { Fine } from '../interfaces/payment.interface';
 import * as adminService from '../services/admin.service';
 
 export async function listMembers(req: Request, res: Response): Promise<void> {
-  const { search } = req.query as unknown as { search?: string };
-  const members = await adminService.listMembers(search);
+  const { search, status, role } = req.query as unknown as {
+    search?: string;
+    status?: Member['status'];
+    role?: Member['role'];
+  };
+  const members = await adminService.listMembers({ search, status, role });
   res.status(200).json(members);
+}
+
+export async function approveMember(req: Request, res: Response): Promise<void> {
+  const { id } = req.params as unknown as { id: number };
+  const member = await adminService.approveMember(id);
+  res.status(200).json(member);
+}
+
+export async function rejectMember(req: Request, res: Response): Promise<void> {
+  const { id } = req.params as unknown as { id: number };
+  const member = await adminService.rejectMember(id);
+  res.status(200).json(member);
+}
+
+export async function suspendMember(req: Request, res: Response): Promise<void> {
+  const { id } = req.params as unknown as { id: number };
+  const member = await adminService.suspendMember(id);
+  res.status(200).json(member);
+}
+
+export async function reactivateMember(req: Request, res: Response): Promise<void> {
+  const { id } = req.params as unknown as { id: number };
+  const member = await adminService.reactivateMember(id);
+  res.status(200).json(member);
 }
 
 export async function getMember(req: Request, res: Response): Promise<void> {

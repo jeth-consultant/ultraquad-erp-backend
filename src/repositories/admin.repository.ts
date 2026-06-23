@@ -1,18 +1,37 @@
 import { pool } from '../db';
 import { Member } from '../interfaces/member.interface';
 
-export async function findAllMembers(search?: string): Promise<Member[]> {
-  if (search) {
-    const result = await pool.query<Member>(
-      `SELECT * FROM members
-       WHERE name ILIKE $1 OR email ILIKE $1 OR member_code ILIKE $1
-       ORDER BY id ASC`,
-      [`%${search}%`],
-    );
-    return result.rows;
+export interface ListMembersFilters {
+  search?: string;
+  status?: Member['status'];
+  role?: Member['role'];
+}
+
+export async function findAllMembers(filters: ListMembersFilters = {}): Promise<Member[]> {
+  const conditions: string[] = [];
+  const params: unknown[] = [];
+
+  if (filters.search) {
+    params.push('%' + filters.search + '%');
+    const idx = params.length;
+    conditions.push('(name ILIKE $' + idx + ' OR email ILIKE $' + idx + ' OR member_code ILIKE $' + idx + ')');
+  }
+  if (filters.status) {
+    params.push(filters.status);
+    conditions.push('status = $' + params.length);
+  }
+  if (filters.role) {
+    params.push(filters.role);
+    conditions.push('role = $' + params.length);
   }
 
-  const result = await pool.query<Member>('SELECT * FROM members ORDER BY id ASC');
+  let sql = 'SELECT * FROM members';
+  if (conditions.length) {
+    sql += ' WHERE ' + conditions.join(' AND ');
+  }
+  sql += ' ORDER BY id ASC';
+
+  const result = await pool.query<Member>(sql, params);
   return result.rows;
 }
 
@@ -55,6 +74,14 @@ export async function updateMember(id: number, input: AdminUpdateMemberInput): P
      WHERE id = $1
      RETURNING *`,
     [id, input.name ?? null, input.email ?? null, input.githubUsername ?? null, input.role ?? null],
+  );
+  return result.rows[0];
+}
+
+export async function updateMemberStatus(id: number, status: Member['status']): Promise<Member | undefined> {
+  const result = await pool.query<Member>(
+    `UPDATE members SET status = $2 WHERE id = $1 RETURNING *`,
+    [id, status],
   );
   return result.rows[0];
 }

@@ -72,6 +72,66 @@ describe('admin.service', () => {
     });
   });
 
+  describe('approveMember', () => {
+    it('throws 404 when the member does not exist', async () => {
+      jest.mocked(adminRepository.updateMemberStatus).mockResolvedValue(undefined);
+
+      await expect(adminService.approveMember(1)).rejects.toMatchObject({ status: 404 });
+    });
+
+    it('sets the member status to approved and notifies the member', async () => {
+      const member = { id: 1, status: 'approved' } as never;
+      jest.mocked(adminRepository.updateMemberStatus).mockResolvedValue(member);
+
+      const result = await adminService.approveMember(1);
+
+      expect(result).toMatchObject({ id: 1, status: 'approved' });
+      expect(adminRepository.updateMemberStatus).toHaveBeenCalledWith(1, 'approved');
+      expect(notificationsRepository.insert).toHaveBeenCalledWith(
+        expect.objectContaining({ memberId: 1, type: 'account_approved' }),
+      );
+    });
+  });
+
+  describe('rejectMember', () => {
+    it('sets the member status to rejected and notifies the member', async () => {
+      const member = { id: 1, status: 'rejected' } as never;
+      jest.mocked(adminRepository.updateMemberStatus).mockResolvedValue(member);
+
+      const result = await adminService.rejectMember(1);
+
+      expect(result).toMatchObject({ id: 1, status: 'rejected' });
+      expect(adminRepository.updateMemberStatus).toHaveBeenCalledWith(1, 'rejected');
+      expect(notificationsRepository.insert).toHaveBeenCalledWith(
+        expect.objectContaining({ memberId: 1, type: 'account_rejected' }),
+      );
+    });
+  });
+
+  describe('suspendMember', () => {
+    it('sets the member status to suspended and notifies the member', async () => {
+      const member = { id: 1, status: 'suspended' } as never;
+      jest.mocked(adminRepository.updateMemberStatus).mockResolvedValue(member);
+
+      const result = await adminService.suspendMember(1);
+
+      expect(result).toMatchObject({ id: 1, status: 'suspended' });
+      expect(adminRepository.updateMemberStatus).toHaveBeenCalledWith(1, 'suspended');
+    });
+  });
+
+  describe('reactivateMember', () => {
+    it('sets the member status back to approved and notifies the member', async () => {
+      const member = { id: 1, status: 'approved' } as never;
+      jest.mocked(adminRepository.updateMemberStatus).mockResolvedValue(member);
+
+      const result = await adminService.reactivateMember(1);
+
+      expect(result).toMatchObject({ id: 1, status: 'approved' });
+      expect(adminRepository.updateMemberStatus).toHaveBeenCalledWith(1, 'approved');
+    });
+  });
+
   describe('broadcastNotification', () => {
     it('returns the number of recipients', async () => {
       jest.mocked(notificationsRepository.insertForAllMembers).mockResolvedValue(12);

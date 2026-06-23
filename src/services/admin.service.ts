@@ -1,12 +1,13 @@
 import { ApiError } from '../middleware/errorHandler';
-import { toPublicMember } from '../interfaces/member.interface';
+import { Member, toPublicMember } from '../interfaces/member.interface';
+import { NotificationType } from '../interfaces/notification.interface';
 import * as adminRepository from '../repositories/admin.repository';
 import * as contributionsRepository from '../repositories/contributions.repository';
 import * as finesRepository from '../repositories/fines.repository';
 import * as notificationsRepository from '../repositories/notifications.repository';
 import * as pushDaysRepository from '../repositories/pushDays.repository';
 import { runDailyPushSync } from '../jobs/pushSync.job';
-import { AdminUpdateMemberInput } from '../repositories/admin.repository';
+import { AdminUpdateMemberInput, ListMembersFilters } from '../repositories/admin.repository';
 import { ContributionFilters } from '../repositories/contributions.repository';
 import { FineFilters } from '../repositories/fines.repository';
 import { PushDayFilters } from '../repositories/pushDays.repository';
@@ -17,8 +18,8 @@ function formatPeriodMonth(date: Date): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
 }
 
-export async function listMembers(search?: string) {
-  const members = await adminRepository.findAllMembers(search);
+export async function listMembers(filters: ListMembersFilters) {
+  const members = await adminRepository.findAllMembers(filters);
   return members.map(toPublicMember);
 }
 
@@ -46,6 +47,51 @@ export async function updateMember(id: number, input: AdminUpdateMemberInput) {
     throw new ApiError(404, 'Member not found');
   }
   return toPublicMember(member);
+}
+
+async function setMemberStatus(
+  id: number,
+  status: Member['status'],
+  notification: { title: string; body: string; type: NotificationType },
+) {
+  const member = await adminRepository.updateMemberStatus(id, status);
+  if (!member) {
+    throw new ApiError(404, 'Member not found');
+  }
+  await notificationsRepository.insert({ memberId: id, ...notification });
+  return toPublicMember(member);
+}
+
+export async function approveMember(id: number) {
+  return setMemberStatus(id, 'approved', {
+    title: 'Account approved',
+    body: 'Your account has been approved. You now have full access.',
+    type: 'account_approved',
+  });
+}
+
+export async function rejectMember(id: number) {
+  return setMemberStatus(id, 'rejected', {
+    title: 'Account registration rejected',
+    body: 'Your account registration was not approved. Contact an admin for more information.',
+    type: 'account_rejected',
+  });
+}
+
+export async function suspendMember(id: number) {
+  return setMemberStatus(id, 'suspended', {
+    title: 'Account suspended',
+    body: 'Your account has been suspended. Contact an admin for more information.',
+    type: 'account_rejected',
+  });
+}
+
+export async function reactivateMember(id: number) {
+  return setMemberStatus(id, 'approved', {
+    title: 'Account reactivated',
+    body: 'Your account has been reactivated.',
+    type: 'account_approved',
+  });
 }
 
 export async function listFines(filters: FineFilters) {
@@ -127,7 +173,7 @@ export async function runPushSync(date?: string) {
 export async function exportMembersCsv(): Promise<string> {
   const members = await adminRepository.findAllMembers();
   return toCsv(
-    ['id', 'member_code', 'name', 'phone', 'email', 'github_username', 'role', 'created_at'],
+    ['id', 'member_code', 'name', 'phone', 'email', 'github_username', 'role', 'status', 'created_at'],
     members.map((m) => [
       m.id,
       m.member_code,
@@ -136,6 +182,7 @@ export async function exportMembersCsv(): Promise<string> {
       m.email,
       m.github_username,
       m.role,
+      m.status,
       m.created_at.toISOString(),
     ]),
   );

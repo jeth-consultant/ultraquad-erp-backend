@@ -1,4 +1,10 @@
-export type NotificationType = 'payment_received' | 'fine_created' | 'daily_push_reminder' | 'admin_broadcast';
+export type NotificationType =
+  | 'payment_received'
+  | 'fine_created'
+  | 'daily_push_reminder'
+  | 'admin_broadcast'
+  | 'account_approved'
+  | 'account_rejected';
 
 export interface Notification {
   id: number;
