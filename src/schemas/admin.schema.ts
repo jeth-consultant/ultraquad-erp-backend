@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 export const listMembersQuerySchema = z.object({
   search: z.string().min(1).max(160).optional(),
+  status: z.enum(['pending', 'approved', 'rejected', 'suspended']).optional(),
+  role: z.enum(['member', 'admin']).optional(),
 });
 
 export const memberIdParamSchema = z.object({

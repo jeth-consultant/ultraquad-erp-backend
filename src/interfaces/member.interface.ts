@@ -7,6 +7,7 @@ export interface Member {
   password_hash: string;
   github_username: string | null;
   role: 'member' | 'admin';
+  status: 'pending' | 'approved' | 'rejected' | 'suspended';
   created_at: Date;
 }
 

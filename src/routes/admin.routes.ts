@@ -35,6 +35,26 @@ adminRouter.patch(
   validate(updateMemberSchema),
   asyncHandler(adminController.updateMember),
 );
+adminRouter.patch(
+  '/members/:id/approve',
+  validate(memberIdParamSchema, 'params'),
+  asyncHandler(adminController.approveMember),
+);
+adminRouter.patch(
+  '/members/:id/reject',
+  validate(memberIdParamSchema, 'params'),
+  asyncHandler(adminController.rejectMember),
+);
+adminRouter.patch(
+  '/members/:id/suspend',
+  validate(memberIdParamSchema, 'params'),
+  asyncHandler(adminController.suspendMember),
+);
+adminRouter.patch(
+  '/members/:id/reactivate',
+  validate(memberIdParamSchema, 'params'),
+  asyncHandler(adminController.reactivateMember),
+);
 
 adminRouter.get('/fines', validate(listFinesQuerySchema, 'query'), asyncHandler(adminController.listFines));
 adminRouter.post('/fines', validate(createFineSchema), asyncHandler(adminController.createFine));

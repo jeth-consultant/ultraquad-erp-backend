@@ -21,8 +21,8 @@ interface LoginInput {
   password: string;
 }
 
-async function issueTokens(member: Pick<Member, 'id' | 'role'>) {
-  const payload: AuthPayload = { memberId: member.id, role: member.role };
+async function issueTokens(member: Pick<Member, 'id' | 'role' | 'status'>) {
+  const payload: AuthPayload = { memberId: member.id, role: member.role, status: member.status };
   const accessToken = signAccessToken(payload);
   const refreshToken = signRefreshToken(payload);
 
@@ -99,7 +99,7 @@ export async function refresh(refreshToken: string) {
 
   await authRepository.revokeRefreshTokenById(stored.id);
 
-  return issueTokens({ id: payload.memberId, role: payload.role });
+  return issueTokens({ id: payload.memberId, role: payload.role, status: payload.status });
 }
 
 export async function logout(refreshToken: string): Promise<void> {
